@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>who are x</title>
+	<link rel="icon" href="../imgs/favicon.ico" type="image/x-icon"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+	<link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="./article.css">
+</head>
+<body>
+	<div class="container">
+	  	<a href="../home.html">
+		    <img src="../imgs/hometitle.png" class="img-responsive" alt="">
+	  	</a>
+  		<div class="row">
+  			<div class="col-md-9">
+		  		<div class="breadcrumbs clear-float">
+		  			<div class="float-left"><a href="../home.html">首页</a></div>
+		  			<div class="float-left">></div>
+		  			<div class="float-left">
+		  				<%title%>
+		  			</div>
+		  		</div>
+		  		<div class="article-title">
+		  		<%title%>
+		  		</div>
+		  		<div class="article-category">#<a href="javascript:void(0);">
+		  		<%category%>
+		  		</a>&nbsp;whorx@
+		  		<%createtime%>
+		  		</div>
+				<div class="article-content">
+					<!-- 文章内容开始 -->
+				<%content%>
+
+					<!-- 文章内容结束 -->
+				</div>
+	  		</div>
+	  		<div class="col-md-3">
+	  			<div class="nav">写在人生边上</div>
+	  			<ul class="nav-ul">
+	  				<li><a href="javascript:void(0);">闻道有先后</a></li>
+	  				<li><a href="javascript:void(0);">术业有专攻</a></li>
+	  				<li><a href="javascript:void(0);">世事洞明皆学问</a></li>
+	  				<li><a href="javascript:void(0);">人情练达即文章</a></li>
+	  			</ul>
+	  		</div>
+  		</div>
+  		<div class="footer clear-float">
+  			<div class="about-me float-left" style="text-align: center;">
+  				|&nbsp;关于我
+  			</div>
+  			<div class="follow-me float-left clear-float">
+  				<img class="weixin-pic img-responsive" src="../imgs/weixinlink.png" alt="">
+  			<div class="float-left">|&nbsp;关注我</div>
+  			<div class="float-left">
+  				<a href="http://weibo.com/hrx1992" class="weiboLink"><img src="../imgs/weibo0.png" alt=""></a>
+  				<a href="javascript:void(0);" class="weixinLink"><img src="../imgs/weixin0.png" alt=""></a>
+  			</div>
+  	</div>
+  		</div>
+	</div>
+	<script src="./article.js"></script>
+</body>
+</html>

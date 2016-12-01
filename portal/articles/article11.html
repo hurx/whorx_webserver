@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>who are x</title>
+	<link rel="icon" href="../imgs/favicon.ico" type="image/x-icon"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+	<link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="./article.css">
+</head>
+<body>
+	<div class="container">
+	  	<a href="../home.html">
+		    <img src="../imgs/hometitle.png" class="img-responsive" alt="">
+	  	</a>
+  		<div class="row">
+  			<div class="col-md-9">
+		  		<div class="breadcrumbs clear-float">
+		  			<div class="float-left"><a href="../home.html">首页</a></div>
+		  			<div class="float-left">></div>
+		  			<div class="float-left">
+		  				UI测试自动化实例
+		  			</div>
+		  		</div>
+		  		<div class="article-title">
+		  		UI测试自动化实例
+		  		</div>
+		  		<div class="article-category">#<a href="javascript:void(0);">
+		  		术业
+		  		</a>&nbsp;whorx@
+		  		2016-10-24
+		  		</div>
+				<div class="article-content">
+				<p><span class="bigger">>>【FIRST OF ALL】</span>“工欲善其事必先利其器”</p>
+				<p>一、概述</p>
+				<p>1.用selenium中的webdriver实现案例中对浏览器的界面自动化操作；</p>
+				<p>2.用unittest组织并执行测试案例；</p>
+				<p>3.用HTMLTestRunner生成测试报告。</p>
+				<p>二、环境、依赖包</p>
+				<p>1.python27</p>
+				<p>2.selenium</p>
+				<p>3.HTMLTestRunner</p>
+				<P><span class="bigger">>>【KEY TO THE POINT】</span>“他山之石，可以攻玉”</P>
+				<p>unittest 生成测试案例的两种方式：</p>
+				<p><span class="bigger">方法一：</span>通过discover的方法，将指定目录下的测试案例生成测试套</p>
+				<div class="script">
+					<pre>
+test_suites = unittest.TestSuite()
+# 定义discover方法:找到指定目录下所有测试模块，并可递归查到子目录下的测试模块。只有匹配到文件名才能被加载。如果启动的不是顶层目录，那么顶层目录必须要单独指定。
+discover = unittest.defaultTestLoader.discover(test_suites_path,pattern='test*.py',top_level_dir=None)
+for test_suite in discover:
+    for test_case in test_suite:
+        test_suites.addTest(test_case)
+					</pre>
+				</div>
+				<p><span class="bigger">方法二：</span>向测试套中加载单个测试用例</p>
+				<div class="script">
+					<pre>
+test_suites = unittest.TestSuite()
+testunit.addTest(unittest.makeSuite(testsuite1.testCase))
+					</pre>
+				</div>
+				<p>此方法，引申为通过配置文件，执行指定的测试用例。</p>
+				<div class="script">
+					<pre>
+def create_test_suites_by_list(case_list_file):
+    fp = open(case_list_file, 'r')
+	lines = fp.readlines()
+    for line in lines:
+    	test_case = line.split(',')
+    	import_str = "from testSuites.%s import %s" % (test_case[0], test_case[1])
+    	exec import_str
+    	test_suites.addTest(unittest.makeSuite(eval(test_case[1])))
+    return test_suites
+					</pre>
+				</div>
+				<p><span class="bigger">>>【AND THEN】</span>“without the source code, you are up the proverbial tata without a tutu”</p>
+				<p>为了实现测试逻辑和测试数据的分离，也为了案例的可维护性，提供以下方式：</p>
+				<div class="script">
+					<pre>
+#该类定义了页面逻辑
+class PageOpt:
+    def __init__(self, driver):
+        self.driver = driver
+
+    def options(self, **args):
+        if args["user_name"] is None:
+            pass
+        else:
+            self.driver.find_element_by_id("input_user_name").send_keys(args["user_name"])
+        if args["pass_word"] is None:
+            pass
+        else:
+            self.driver.find_element_by_id("input_user_pwd").send_keys(args["pass_word"])
+        if args["submit"] is None:
+            pass
+        else:
+            self.driver.find_element_by_id("login_btn").click()
+
+#调用方式
+import PageOpt
+class LoginTest(unittest.TestCase):
+    def test_success(self):
+        u"""成功案例"""
+        args = {
+            "user_name": "username",
+            "pass_word": '111111',
+            "submit": '1'
+        }
+        self.page_opt.options(**args)
+					</pre>
+				</div>
+				<p><span class="bigger">>>【WHAT'S MORE】</span></p>
+				<p>关于cx_Oracle的封装。由于oracle使用的编码格式为GBK，所以将cx_Oracle封装以实现对中文的支持。以fetchone为例，同时也推荐使用fetchone方式，因为考虑到性能问题，且自动化测试大部分时候也只需要用到第一条数据。</p>
+				<div class="script">
+					<pre>
+def sql_execute_fetchone(self, sql_statement, params=None):
+    """
+    execute sql statment, get the first line
+    :arg
+        sql_statment: sql statment  , type string
+        params: params in sql statment , dictionary
+    :return
+        a list of the first line, eg: ['1' , '2', '3']
+    """
+    result_list = []
+    if params is None:
+        self.cur.execute(sql_statement)
+    else:
+        self.cur.execute(sql_statement, params)
+    sql_result = self.cur.fetchone()
+    if sql_result is None:
+        return result_list
+    for element in sql_result:
+        if isinstance(element, str):
+            result_list.append(element.decode('gbk'))
+        else:
+            result_list.append(element)
+    return result_list
+					</pre>
+				</div>
+				<p><span class="bigger">>>【THE END】</span>“我不接受这样的全剧终”</p>
+				<p>完整实现请参考：<a href="https://github.com/hurx/AutoUITest" target="_Blank">我的github</a></p>
+				<p>附：<a href="https://selenium-python.readthedocs.io/" target="_Blank">Selenium With Python</a></p>
+				<p>注：参考书籍《selenium2 python 自动化测试实战》 --by 虫师</p>
+				</div>
+	  		</div>
+	  		<div class="col-md-3">
+	  			<div class="nav">写在人生边上</div>
+	  			<ul class="nav-ul">
+	  				<li><a href="javascript:void(0);">闻道有先后</a></li>
+	  				<li><a href="javascript:void(0);">术业有专攻</a></li>
+	  				<li><a href="javascript:void(0);">世事洞明皆学问</a></li>
+	  				<li><a href="javascript:void(0);">人情练达即文章</a></li>
+	  			</ul>
+	  		</div>
+  		</div>
+  		<div class="footer clear-float">
+  			<div class="about-me float-left" style="text-align: center;">
+  				|&nbsp;关于我
+  			</div>
+  			<div class="follow-me float-left clear-float">
+  				<img class="weixin-pic img-responsive" src="../imgs/weixinlink.png" alt="">
+  			<div class="float-left">|&nbsp;关注我</div>
+  			<div class="float-left">
+  				<a href="http://weibo.com/hrx1992" class="weiboLink"><img src="../imgs/weibo0.png" alt=""></a>
+  				<a href="javascript:void(0);" class="weixinLink"><img src="../imgs/weixin0.png" alt=""></a>
+  			</div>
+  	</div>
+  		</div>
+	</div>
+	<script src="./article.js"></script>
+</body>
+</html>

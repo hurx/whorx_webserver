@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>who are x</title>
+	<link rel="icon" href="../imgs/favicon.ico" type="image/x-icon"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+	<link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="./article.css">
+</head>
+<body>
+	<div class="container">
+	  	<a href="../home.html">
+		    <img src="../imgs/hometitle.png" class="img-responsive" alt="">
+	  	</a>
+  		<div class="row">
+  			<div class="col-md-9">
+		  		<div class="breadcrumbs clear-float">
+		  			<div class="float-left"><a href="../home.html">首页</a></div>
+		  			<div class="float-left">></div>
+		  			<div class="float-left">
+﻿阿里云搭建nodejs服务器不完全指北
+		  			</div>
+		  		</div>
+		  		<div class="article-title">
+﻿阿里云搭建nodejs服务器不完全指北
+		  		</div>
+		  		<div class="article-category">#<a href="javascript:void(0);">
+Node.js
+		  		</a>&nbsp;whorx@
+2016-03-27
+		  		</div>
+				<div class="article-content">
+					<!-- 文章内容开始 -->
+
+	<p><span class="bigger">原理</span>：浏览器 请求 服务器内容，服务器处理后，返回内容给浏览器。</p>
+	<p>1.浏览器访问www.abc.com;</p>
+	<p>2.DNS解析将www.abc.com解析成ip地址，如123.123.123.123：80，默认解析端口为80；</p>
+	<p>3.浏览器发送http GET请求到123.123.123.123：80/；</p>
+	<p>4.服务器接收到GET请求，处理请求并返回内容给浏览器；</p>
+	<p>5.浏览器根据文件格式，解析请求，并显示。</p>
+	<p>SO，集齐下面的东西就可以<span class="bigger">召唤神龙</span>了：</p>
+	<p>1.一个可以访问的域名；</p>
+	<p>2.一台运行server的服务器；</p>
+	<p>3.将域名解析到对应服务器ip；</p>
+	<p>4.上面三兄弟阿里云均有销售。【此处为硬广告】</p>
+	<p>购买阿里云服务器后，会收到一个服务器外网ip，将域名和ip绑定。具体操作请猛戳：</p>
+	<p>http://jingyan.baidu.com/article/1e5468f97c9072484861b761.html</p>
+	<p>注：服务器可以选择操作系统，Windows、Ubuntu、Centos等，推荐选linux的系统，别问我为什么。</p>
+	<p>以下为在linux环境下<span class="bigger">搭建nodejs服务器</span>：</p>
+	<p>1.   登陆服务器：用xshell等ssh工具登陆服务器ip。支持sftp，如果在本地写好的nodejs服务器，sftp上去就好了。</p>
+	<p>2.   安装nodejs：</p>
+	<p>安装nodejs前提是需要安装python、g++，好在阿里云的服务器系统化已经装好了。</p>
+	<p>直接上https://nodejs.org/en/download/将对应的包（source code：node-v4.4.1.tar.gz）下载到本地，再上传到服务器上（直接在服务器上用sudo apt-get install nodejs安装nodejs，下载速度感人,请慎用）。然后按照下面处理：</p>
+	<p>tar zxf node-v4.4.1.tar.gz ---解压nodejs包</p>
+	<p>cd node-v4.4.1----到node文件目录下</p>
+	<p>./configure ----预处理命令</p>
+	<p>make ----编译命令，此处需要很长时间，请耐心等待</p>
+	<p>make install----安装命令</p>
+	<p>npm -g install express forever ---安装完成后，自带npm工具。用npm命令获取forever。forever工具用于服务器管理。</p>
+	<p>以上步骤完成后，服务器环境<span class="bigger">搭建完成</span>。</p>
+	<p>下面是一段简易的<span class="bigger">nodejs服务器代码</span>（server.js文件内容，同时<span class="bigger">解决访问不到css和png的问题</span>），文件目录为~/server/server.js,~/portal/index.html。html文件就自行发挥吧：</p>
+	<div class="script">
+		<pre>
+var PORT = 80;
+var IP = '127.0.0.1';-- --此处应为阿里云服务器ip
+var http = require('http');
+var url = require('url');
+var fs = require('fs');
+var path = require('path');
+http.createServer(function(request, response) {
+	varurlPath = url.parse(request.url).pathname;
+	varpathName = urlPath;
+	if (urlPath === '/favicon.ico') { //去掉烦人的icon请求，就是浏览器title上的图标
+		response.end();
+	} else {
+		if (urlPath === '/') {
+			pathName = '../portal/index.html';
+		} else {
+			pathName = '../portal' + pathName;
+		}
+		fs.readFile(pathName, function(err, file) {
+			if (err) {
+				response.writeHead(404, {
+					'Content-Type': 'text/html'
+				});
+				response.write("404NOT FOUND");
+				response.end();
+			} else {
+				varext = path.extname(pathName).substr(1, this.length);
+				varcontentType = typeList[ext];
+				response.writeHead(200, {
+					'Content-Type': contentType
+				});
+				response.write(file);
+				response.end();
+			}
+		});
+	}
+}).listen(PORT, IP);
+
+var typeList = {
+
+	"html": "text/html",
+
+	"css": "text/css",
+
+	"png": "image/png",
+
+	"js": "text/javascript"
+
+};
+console.log("server start");
+		</pre>
+	</div>
+	<p>启动服务器：forever start server.js </p>
+	<p>查看forever启动list：sudo forever list</p>
+	<p>停止服务器：forever stop 0 </p>
+	<p>以上完成后，就能在浏览器中访问www.abc.com。但是，会得到一个意想不到的惊喜。因为，阿里云的服务器都需要去备案，备案，案！</p>
+	<p><span class="bigger">我曾离召唤神龙如此之近！?</span>咖喱给给！~</p>
+					<!-- 文章内容结束 -->
+				</div>
+	  		</div>
+	  		<div class="col-md-3">
+	  			<div class="nav">写在人生边上</div>
+	  			<ul class="nav-ul">
+	  				<li><a href="javascript:void(0);">闻道有先后</a></li>
+	  				<li><a href="javascript:void(0);">术业有专攻</a></li>
+	  				<li><a href="javascript:void(0);">世事洞明皆学问</a></li>
+	  				<li><a href="javascript:void(0);">人情练达即文章</a></li>
+	  			</ul>
+	  		</div>
+  		</div>
+  		<div class="footer clear-float">
+  			<div class="about-me float-left" style="text-align: center;">
+  				|&nbsp;关于我
+  			</div>
+  			<div class="follow-me float-left clear-float">
+  				<img class="weixin-pic img-responsive" src="../imgs/weixinlink.png" alt="">
+  			<div class="float-left">|&nbsp;关注我</div>
+  			<div class="float-left">
+  				<a href="http://weibo.com/hrx1992" class="weiboLink"><img src="../imgs/weibo0.png" alt=""></a>
+  				<a href="javascript:void(0);" class="weixinLink"><img src="../imgs/weixin0.png" alt=""></a>
+  			</div>
+  	</div>
+  		</div>
+	</div>
+	<script src="./article.js"></script>
+</body>
+</html>
